@@ -1,0 +1,381 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #111;
+  color: #eee;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  background: #1a1a1a;
+}
+
+nav a {
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+nav a:hover {
+  color: #ddeeff;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+a {
+  color: #77f;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #aac8ff;
+}
+
+main {
+  max-width: 720px;
+  margin: 6rem auto 4rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+a.cta-button {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.65rem 1.4rem;
+  background: rgba(36, 36, 36, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(100, 100, 255, 0.2);
+  border-radius: 8px;
+  color: #aaccff;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  transition: all 0.25s ease;
+}
+
+a.cta-button:hover {
+  background: rgba(56, 56, 56, 0.9);
+  color: #cce6ff;
+  border-color: rgba(140, 140, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.footer-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1rem 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #bbb;
+}
+
+.footer-links a {
+  margin: 0 0.4rem;
+  font-weight: 500;
+}
+
+.project {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 3rem 0;
+  padding: 0 1rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.project img {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.project-text {
+  flex: 1;
+}
+
+.project-text h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+}
+
+.project-text p {
+  margin: 0 0 0.75rem;
+  line-height: 1.5;
+}
+
+/* For projects without images */
+.project.no-image {
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.project.no-image .project-text {
+  max-width: 600px;
+}
+
+@media (max-width: 640px) {
+  .project {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .project-text {
+    align-items: center;
+  }
+
+  .project img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .project.no-image .project-text {
+    padding-top: 1rem;
+  }
+}
+
+.project-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.project-links a {
+  background: #2b2b2b;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.project-links a:hover {
+  background: #3d3d3d;
+}
+
+.hover-detail {
+  border-bottom: 1px dashed #888;
+  cursor: help;
+  position: relative;
+  font-size: 0.9em;
+  color: #888;
+}
+
+.hover-detail::after {
+  content: attr(data-tooltip);
+  visibility: hidden;
+  opacity: 0;
+  width: 280px;
+  background-color: #222;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 0.75rem;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
+  font-size: 0.85em;
+  white-space: normal;
+}
+
+.hover-detail:hover::after {
+  visibility: visible;
+  opacity: 1;
+}
+
+.achievement {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: 2.5rem 0;
+  padding-bottom: 2rem;
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+.achievement-text {
+  flex: 2 1 0;
+  min-width: 0;
+}
+
+.cert-bundle {
+  flex: 1 1 220px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 220px;
+  min-width: 180px;
+  min-height: 250px;
+}
+
+.cert-preview {
+  width: 100%;
+  max-width: 220px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  z-index: 2;
+}
+
+/* Overlapping back layers */
+.cert-bundle .cert-preview:nth-of-type(2) {
+  transform: rotate(-2deg);
+  top: 18px;
+  left: 18px;
+  opacity: 0.9;
+  z-index: 1;
+}
+
+.cert-bundle .cert-preview:nth-of-type(3) {
+  transform: rotate(2deg);
+  top: 36px;
+  left: 36px;
+  opacity: 0.85;
+  z-index: 0;
+}
+
+/* Hover animation */
+.cert-bundle:hover .cert-preview {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.cert-bundle:hover .cert-preview:nth-of-type(2) {
+  transform: rotate(-4deg) translate(9px, 9px) scale(1.03);
+  opacity: 1;
+  z-index: 1;
+}
+
+.cert-bundle:hover .cert-preview:nth-of-type(3) {
+  transform: rotate(4deg) translate(12px, 12px) scale(1.02);
+  opacity: 1;
+  z-index: 1;
+}
+
+.medal {
+  font-size: 1.3em;
+  vertical-align: middle;
+  margin-right: 0.4em;
+}
+
+.medal.silver {
+  color: #c0c0c0;
+  filter: drop-shadow(0 0 2px #aaa);
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 4rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.4rem;
+  color: inherit;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  height: 3px;
+  width: 60px;
+  background-color: currentColor;
+  margin: 0.6rem auto 0;
+  border-radius: 2px;
+  opacity: 0.4;
+}
+
+.math-oly .cert-bundle {
+  max-width: 280px;
+  min-height: unset;
+}
+
+.math-oly .cert-preview {
+  max-width: 280px;
+}
+
+.ap-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.ap-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.ap-text h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.ap-subtext {
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.ap-score {
+  font-family: 'Roboto Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 1.15rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ap-score.good {
+  color: #4CAF50;
+}
+
+.ap-score.mid {
+  color: #FFA000;
+}
+
+.ap-exams .cert-bundle {
+  min-height: unset; 
+}
+
+.achievement-category.misc .cert-preview {
+  max-width: 260px;
+}
+
+.achievement-category.misc .cert-bundle {
+  max-width: 260px;
+  min-width: 200px;
+  min-height: 300px;
+}
