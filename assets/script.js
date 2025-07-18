@@ -1,7 +1,27 @@
-async function load_component(id, file) {
-  const res = await fetch(file);
-  const html = await res.text();
-  document.getElementById(id).innerHTML = html;
+const images_to_prefetch = [
+  '/images/arithmetica.jpeg',
+  '/images/spoi.png',
+  '/images/washedup.ico',
+  '/certs/apscholar.png',
+  '/certs/cathcon1.png',
+  '/certs/cathcon2.png',
+  '/certs/cathcon3.png',
+  '/certs/inmo2025.png',
+  '/certs/inoi2024-medal.png',
+  '/certs/inoi2025-medal.png',
+  '/certs/ioitc2024.png',
+  '/certs/ioitc2025.png',
+  '/certs/ioqm2025.png'
+];
+
+function prefetch_images() {
+  images_to_prefetch.forEach(src => {
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = src;
+    link.as = 'image';
+    document.head.appendChild(link);
+  });
 }
 
 function update_year() {
@@ -12,7 +32,6 @@ function update_year() {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
-  await load_component("header-placeholder", "/components/header.html");
-  await load_component("footer-placeholder", "/components/footer.html");
+  prefetch_images();
   update_year();
 });
