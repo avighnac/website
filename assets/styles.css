@@ -54,6 +54,7 @@ main {
 
 main.blog-page {
   max-width: 120vh;
+  margin-top: 0;
 }
 
 a.cta-button {
