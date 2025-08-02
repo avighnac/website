@@ -35,9 +35,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         else:
             super().send_error(code, message, explain)
 
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True 
+
 if __name__ == "__main__":
     print(f"Serving '{DIRECTORY}' at http://localhost:{PORT}")
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    with ReusableTCPServer(("", PORT), Handler) as httpd:
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:

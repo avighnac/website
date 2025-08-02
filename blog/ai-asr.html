@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ai-asr — Blog</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon/favicon_32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon/favicon_16x16.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../images/favicon/favicon_48x48.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="../images/favicon/favicon_64x64.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="../images/favicon/favicon_128x128.png">
+  <link rel="shortcut icon" href="../images/favicon/favicon.ico">
+</head>
+
+<body>
+  <div id="header-placeholder">
+    <header>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/projects">Projects</a>
+        <a href="/achievements">Achievements</a>
+        <a href="/resume">Résumé</a>
+        <a href="/blog">Blog</a>
+      </nav>
+    </header>
+  </div>
+
+  <main class="blog-page">
+    <article class="blog-post">
+      <!-- Use a consistent and typographically clear format for better readability -->
+      <h1>🗣️ Why Can’t My AI Just Write Down the Words I Screamed Into My Mic at 3AM</h1>
+
+      <!-- Instead of multiple <p> tags for every sentence, logically group paragraphs for better flow -->
+      <p>
+        Quick question: why haven’t people been able to make good automatic-speech-recognition (ASR) AI models yet?
+      </p>
+
+      <p>
+        I mean, we’ve done everything else. Image generation? Done. Video synthesis? Yep. o3 has a Codeforces rating of
+        2500 and an IOI silver. o3-IOI (under relaxed constraints) has IOI gold. Literal language parsing? Solved. Even
+        TTS is basically perfect—natural-sounding, emotive, intonation-aware.
+      </p>
+
+      <p>
+        But ASR? It still flops.
+      </p>
+
+      <p>
+        I mean, be honest—when was the last time you actually used your phone’s voice transcription feature
+        unironically? You haven’t. No one has. You’ve seen the icon a hundred times, but your brain just skips over it.
+      </p>
+
+      <p>
+        ChatGPT’s voice transcription is good—very good, in fact—but you’ll still find one horribly misinterpreted
+        sentence every 3–4 lines. It’s amazing at punctuation. It’s almost there. But that one failure always reminds
+        you: this model doesn’t really understand what you’re saying.
+      </p>
+
+      <p>So what’s going on? Is ASR just that much harder than everything else?</p>
+
+      <p class="blog-transition">Let’s try some explanations.</p>
+
+      <p>Maybe speech is fundamentally ambiguous in a way other modalities aren’t. Sure. Humans speak in noisy, mumbled,
+        overlapping, dialect-specific ways. Sounds like a decent explanation.</p>
+
+      <p>… but wait. No. That shouldn’t be such a big deal. TTS— text-to-speech— works just fine. And it deals with a
+        lot
+        of the same challenges. Images can be noisy. So can handwriting. In fact, not only is handwriting
+        person-specific, it’s often borderline illegible— and yet OCR works incredibly well.</p>
+
+      <p>Even language itself is messy— English especially. But LLMs figured it out. This isn’t enough.</p>
+
+      <p class="blog-transition">Okay. Let’s try again.</p>
+
+      <p>
+        Maybe the issue is that audio data is noisy, varied, and contextual. It includes emotional tone, sarcasm,
+        interruptions, echo, background noise. Long-form dependencies. No word boundaries. No punctuation.
+      </p>
+
+      <p>
+        Sure, this is closer to something meaningful. But I’m still not convinced.
+      </p>
+
+      <ul>
+        <li>“Noise and variation”? Already talked about that. Not unique.</li>
+        <li>“Long context”? Gemini has a context length of a million tokens. And besides, we’ve made huge strides in
+          summarization, code tracing, and story coherence.</li>
+        <li>“Oh, but tokens don’t exist in audio.” Okay—fair. But OCR doesn’t have token boundaries either. And models
+          handle that surprisingly well.</li>
+      </ul>
+
+      <p>So again: why is speech the thing that breaks AI?</p>
+
+      <p>Let’s eliminate what speech isn’t uniquely worse at: noisy input, ambiguous structure, and a lack of clear
+        tokens: all three things already demonstrated by images, language, and handwritten text.</p>
+
+      <p>None of these explain the gap. So what is different?</p>
+
+      <p class="blog-transition">Here’s the actual problem: Human speech is intrinsically temporal and compositional in
+        a way no other AI input is. Speech is not just input. It evolves in time, and interpreting it requires joint
+        reasoning over timing, memory,
+        semantics, and expectation.</p>
+
+      <p>When you listen to someone say:</p>
+
+      <blockquote>“She said the man who… uh… the, um… doctor—not the other one—”</blockquote>
+
+      <p>You track intent, conversational goal, and who’s being corrected. Sense social dynamics. Use prosody
+        (intonation), pauses, repetition, disfluencies—all of which affect meaning.</p>
+
+      <p>How do we encode these into parameters? LLMs never had to learn that off the bat. Even OCR never had to do
+        something this complex. Vision models? Not even close. And even Whisper doesn’t.</p>
+
+      <p class="blog-transition">Another issue: there’s no standardized symbolic representation of sound.</p>
+
+      <div class="symbol-map">
+        <div>
+          <strong>Text</strong>
+          <svg viewBox="0 0 60 16" class="inline-arrow">
+            <line x1="0" y1="8" x2="55" y2="8" />
+            <polyline points="50,4 55,8 50,12" />
+          </svg>
+          tokens
+        </div>
+        <div>
+          <strong>Images</strong>
+          <svg viewBox="0 0 60 16" class="inline-arrow">
+            <line x1="0" y1="8" x2="55" y2="8" />
+            <polyline points="50,4 55,8 50,12" />
+          </svg>
+          pixels
+        </div>
+        <div>
+          <strong>OCR</strong>
+          <svg viewBox="0 0 60 16" class="inline-arrow">
+            <line x1="0" y1="8" x2="55" y2="8" />
+            <polyline points="50,4 55,8 50,12" />
+          </svg>
+          glyphs
+        </div>
+        <div>
+          <strong>Code</strong>
+          <svg viewBox="0 0 60 16" class="inline-arrow tooltip-arrow">
+            <line x1="0" y1="8" x2="55" y2="8" />
+            <polyline points="50,4 55,8 50,12" />
+          </svg>
+          <span class="hover-detail"
+            data-tooltip="This one’s so clean it barely counts—we literally have compilers.">ASTs</span>
+        </div>
+      </div>
+
+      <p>But what about audio? Can we just use the frequencies of the raw waveform? Nope. Because symbolic
+        representation isn’t just raw data—it has to carry extractable meaning in a way that’s both structured and
+        learnable. That’s why we tokenize text instead of feeding in raw characters.</p>
+
+      <p>And even if we did manage to impose some structured representation on the raw waveform—something that feels
+        vaguely symbolic—what would we actually map it to?</p>
+
+      <ul>
+        <li>Phonemes? Language-dependent, fuzzy, no clean boundaries</li>
+        <li>Syllables? Too coarse</li>
+        <li>Audio frames? Arbitrary sampling choice, meaningless without structure</li>
+      </ul>
+
+      <p class="blog-transition">Humans, meanwhile, solve this via specialized hardware (our cochlea), pre-baked
+        representation
+        compression, and years of exposure during a critical period. </p>
+
+      <p>
+        Oh, and one more thing: human speech comprehension is massively top-down<span class="interruption">—</span>
+      </p>
+
+      <p class="blog-hard-break">Wait a minute.</p>
+
+      <p>
+        That part—“humans solve this via specialized hardware” … that actually sounds familiar. Doesn’t this describe
+        every single machine learning system ever? The “specialized hardware” is just the protocol—the matrix
+        multiplications and architectural structure baked into the GPU. The “pre-baked representation” becomes tuned
+        weights and dense learned embeddings. And “years of exposure”? That’s just training epochs, stretched out over
+        gradient descent.
+      </p>
+
+      <p>So … what’s the difference?</p>
+
+      <p class="blog-transition">Ah. Here’s where the illusion of equivalence breaks down.</p>
+
+      <p>Yes, it looks like a clean mapping:</p>
+
+      <div class="symbol-map">
+        <div>
+          <strong>Cochlea</strong>
+          <svg viewBox="0 0 60 16" class="inline-arrow">
+            <line x1="0" y1="8" x2="55" y2="8" />
+            <polyline points="50,4 55,8 50,12" />
+          </svg>
+          Neural net architecture
+        </div>
+        <div>
+          <strong>Representation</strong>
+          <svg viewBox="0 0 60 16" class="inline-arrow">
+            <line x1="0" y1="8" x2="55" y2="8" />
+            <polyline points="50,4 55,8 50,12" />
+          </svg>
+          Learned embeddings, layers
+        </div>
+        <div>
+          <strong>Years of exposure</strong>
+          <svg viewBox="0 0 60 16" class="inline-arrow">
+            <line x1="0" y1="8" x2="55" y2="8" />
+            <polyline points="50,4 55,8 50,12" />
+          </svg>
+          Training epochs, big data
+        </div>
+      </div>
+
+      <p>But these aren’t equivalent in structure. The human auditory system isn’t just a fancy feature extractor. It’s
+        a dynamically wired preprocessor shaped by millions of years of evolutionary pressure.</p>
+
+      <p>When we say “cochlea,” we’re not just referring to a 1D convolutional kernel. The biological cochlea performs
+        nonlinear, frequency-specific compression, automatically mapping frequencies to perceived pitch on a logarithmic
+        scale. It adapts in real time to filter noise, and instead of outputting dense float vectors, it transmits
+        spike-based signals through parallel neural pathways. Most critically, it interfaces directly with attention
+        systems—letting us focus on a single voice in a noisy room.
+      </p>
+
+      <p>With near-zero latency. This isn't just some ‘clever’ encoder: it's more like an inductive bias, hardwired into
+        biology, evolved over 500 million years.</p>
+
+      <p class="blog-transition">Today’s ASR models? They typically take in raw waveforms (yep, that idea we had
+        earlier) or Mel spectrograms. Then they run it through batch norm, convolutional layers, and transformers. But
+        here’s the problem: nothing in that process guarantees that phase, rhythm, stress, or even the overall auditory
+        scene structure will be preserved.</p>
+
+      <p>You could say the function is similar. But the alignment is off—by layers and layers of abstraction.</p>
+
+      <p>And by the way—backpropagation is not neuroplasticity. Why? Backprop works by computing global gradients across
+        many layers and adjusting weights. The brain doesn’t do that. It relies on local, spike-timing-dependent
+        plasticity—more Hebbian than SGD. There’s no global loss function to minimize in your head. In fact, your brain
+        runs on dozens of local, competing, self-regulating modules.</p>
+
+      <p>AI learns exactly what it’s told to optimize. Humans learn what’s meaningful, adaptive, and predictive—whether
+        or not there’s supervision. And this becomes super important when your “training data” isn’t as clean as:</p>
+
+      <blockquote>“This audio clip says exactly this.”</blockquote>
+
+      <p>Add contextual bias to the mix, and the cracks really show. That’s why an ASR model can hear:</p>
+
+      <blockquote>“The politician resigned amid controversy”</blockquote>
+
+      <p>and confidently transcribe:</p>
+
+      <blockquote>“The politician re-signed amid controversy”</blockquote>
+
+      <p>Same audio. Same phonemes.
+        But to a human? That obviously makes no sense in context. It’s not a common collocation, and it breaks the
+        expected narrative logic. You’d correct it automatically, unconsciously.</p>
+
+      <p class="blog-transition">So what’s the actual problem again? Right. Systems aren’t linked.</p>
+
+      <p>That becomes the core insight: for AI models to get better, they have to start behaving more like brains. Maybe
+        that means building in competition between modules. Maybe it means unsupervised learning, or predictive
+        correction loops. Maybe it means integrating multiple subsystems with partially shared context.</p>
+
+      <p>Who knows—maybe that’s the missing ingredient. Imagine mimicking the cochlea’s nonlinear, frequency-specific
+        compression. Pass in audio by frequency instead of just time-sliced waveforms.</p>
+
+      <p>Imagine interfacing with other AI systems that think about which syllables are actually relevant. Let them
+        compete. Let them argue. Maybe introduce some kind of evolutionary learning pressure. Maybe bring in social
+        cues.</p>
+
+      <p class="blog-transition">Actually, come to think of it—we’ve already started down this path. We’ve mimicked the
+        retina in convolutional
+        layers, the hippocampus in episodic memory modules, and attention in transformer architectures.</p>
+
+      <p>But we haven’t even touched the full auditory pathway, self-supervised predictive sensorimotor integration,
+        competitive modules that argue internally, or curiosity, clarification-seeking, and error awareness (!!).
+        Implementing these wouldn't just make Whisper++— you'd get something that looks like a nervous system.</p>
+
+      <p class="blog-transition">And yeah—if you said in 2014,</p>
+      <blockquote>“A multilingual model will understand 100+ languages.”</blockquote>
+      <p>No one would believe you.</p>
+
+      <p>2016:</p>
+      <blockquote>“A text generator that passes law exams.”</blockquote>
+      <p>No one would believe you, and they’d probably think you’re ridiculous.</p>
+
+      <p>2024:</p>
+      <blockquote>“A model playing Codeforces at (grand)master level.”</blockquote>
+      <p>No one would believe you, they’d think you’re ridiculous, and they’d probably go on a 7-paragraph thread about
+        how you “don’t understand the deep beauty of competitive programming” and how “LLMs will never replicate the
+        human spark behind a CF 2800.”</p>
+
+      <p>But they all happened. Because every time we think a problem is too hard, we realize we just didn’t understand
+        the structure of the solution yet.</p>
+
+      <p class="blog-transition">And here’s the part that gives me chills: we’re going full circle.</p>
+
+      <p>
+        Have you noticed how every meaningful AI breakthrough strongly mimics something biological? Not just loosely
+        inspired—but architecturally convergent. Episodic memory shows up in neural networks as memory modules. Sparse
+        activation mirrors how real neurons only fire occasionally. Spiking neurons are now being explored even in
+        neuromorphic hardware. And multimodal integration? That's straight from how our brains process vision, sound,
+        and language together.
+      </p>
+
+      <p>We keep rediscovering what the brain already knew. Because we have no other choice. Every time we advance AI in
+        a meaningful way, we end up rediscovering biology. There may be only a handful of workable architectures for
+        general intelligence, and evolution already found one
+        of them.</p>
+
+      <p class="blog-transition">So what does this tell us about AI?</p>
+
+      <p>It suggests that intelligence isn’t arbitrary. It's emergent structure, rather than something that can be
+        brute-forced by adding layers, tokens, or data, shaped by a set of computation that evolution discovered under
+        the constraints of:</p>
+      <ul>
+        <li>Energy efficiency</li>
+        <li>Adaptability</li>
+        <li>Fault tolerance</li>
+        <li>Long-term learning</li>
+        <li>Generalization from limited data</li>
+      </ul>
+
+      <p>So when we finally build AI systems that reason like us, remember like us, and even mishear like us—don’t be
+        surprised if it ends up mimicking biology way more than you expected. That’s not because we’re trying to be
+        poetic. It’s because biology already solved the optimization problem we’re now chasing.</p>
+
+      <p class="blog-transition">What does this tell us about humans?</p>
+
+      <p>That we're not separate from intelligence, or its peak— we're just one instance of a general class of
+        intelligent systems. What we call 'human thought' is just one configuration of a substrate shaped to deal with a
+        messy, dynamic, uncertain world.</p>
+
+      <p>The more we build these systems, the more it feels like we’re just reverse-engineering ourselves. And the
+        solution starts to look eerily familiar … because maybe, under these rules, it's the only one that works.</p>
+
+      <p>Which also means: Biology isn’t a limitation— it’s a map that we've only now started decoding.</p>
+
+      <p class="blog-transition">
+        And the broader picture? We are, in a way, witnessing a recursion of minds: nature built a brain. The brain
+        built machines. And now, the
+        machines have started reconstructing the brain.
+      </p>
+
+      <p>
+        (And who knows—maybe we’re one of the brains some earlier machine reconstructed. That’s a fun discussion for the
+        <a href="https://en.wikipedia.org/wiki/Simulation_hypothesis" target="_blank"
+          rel="noopener noreferrer">simulation theory</a> blog. Not this one.)
+      </p>
+
+      <p class="blog-transition">Wait, what was the topic again?</p>
+
+      <p>Oh right. Automatic-speech-recognition. But you’ve probably realized by now: this wasn’t really a blog about
+        ASR, was it?</p>
+
+      <p>That was just the entry point: The bait. The 3AM voicemail that dragged you into cognition, systems
+        neuroscience, and recursive structure.</p>
+
+      <p>So then—let’s answer the original question:</p>
+      <blockquote>Why can’t my AI just write down the words I screamed into my mic at 3AM?</blockquote>
+
+      <p>Because understanding isn’t transcription. It’s not audio decoding, or phoneme recognition, or even language
+        modeling.</p>
+
+      <p>Understanding is the whole thing.</p>
+
+    </article>
+  </main>
+
+  <div id="footer-placeholder">
+    <footer>
+      <div class="footer-container">
+        <p>&copy; 2025 Avighna Chhatrapati</p>
+        <p>
+          <a href="https://linkedin.com/in/avighnakc" target="_blank" rel="noopener noreferrer">LinkedIn</a> &middot;
+          <a href="mailto:avighnakc@gmail.com">Email</a> &middot;
+          <a href="https://github.com/avighnac" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/script.js"></script>
+</body>
+
+</html>
