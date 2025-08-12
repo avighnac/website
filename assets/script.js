@@ -1,6 +1,7 @@
 const images_to_prefetch = [
   '/images/arithmetica.jpeg',
   '/images/spoi.png',
+  '/images/oi-checklist.png',
   '/images/washedup.ico',
   '/certs/apscholar.png',
   '/certs/cathcon1.png',
