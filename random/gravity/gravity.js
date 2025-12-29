@@ -4,6 +4,36 @@ canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
 let b = [
+  {
+    mass: 1.6e35,
+    radius: 30,
+    x: window.innerWidth / 2 + 200,
+    y: window.innerHeight / 2,
+    vx: 0,
+    vy: 0.5,
+    color: '#ff0000',
+    history: []
+  },
+  {
+    mass: 1.6e35,
+    radius: 30,
+    x: window.innerWidth / 2 - 100,
+    y: window.innerHeight / 2 + 173.205,
+    vx: -0.433,
+    vy: -0.25,
+    color: '#00ff00',
+    history: []
+  },
+  {
+    mass: 1.6e35,
+    radius: 30,
+    x: window.innerWidth / 2 - 100,
+    y: window.innerHeight / 2 - 173.205,
+    vx: 0.433,
+    vy: -0.25,
+    color: '#0000ff',
+    history: []
+  }
 ];
 
 // 400 * sqrt(2) pixels = 1.5*10^8 km
@@ -13,7 +43,7 @@ const G = 6.6743e-11;
 const keys = new Set();
 let dx = 0, dy = 0;
 
-let hz = 60;
+let hz = 6000000;
 
 document.addEventListener("keydown", (e) => {
   keys.add(e.key);
@@ -25,17 +55,17 @@ document.addEventListener("keyup", (e) => {
 
 document.addEventListener("click", (e) => {
   b.push(
-    { mass: 5e30, radius: 30, x: e.clientX, y: e.clientY, vx: 0, vy: 0, color: '#ff0000', history: [] }
+    {mass: 5e30, radius: 30, x: e.clientX, y: e.clientY, vx: 0, vy: 0, color: '#ff0000', history: []}
   );
 });
 
-for (let i = 0; i < window.innerWidth; i += 20) {
-  for (let j = 0; j < window.innerHeight; j += 20) {
-    b.push(
-      { mass: 5e30, radius: 5, x: i + 50, y: j + 50, vx: 0, vy: 0, color: '#ff0000' }
-    );
-  }
-}
+// for (let i = 0; i < window.innerWidth; i += 100) {
+//   for (let j = 0; j < window.innerHeight; j += 100) {
+//     b.push(
+//       {mass: 5e30, radius: 30, x: i + 50, y: j + 50, vx: 0, vy: 0, color: '#ff0000'}
+//     );
+//   }
+// }
 
 function animate() {
   dx = 0; dy = 0;
@@ -81,3 +111,4 @@ function animate() {
 }
 
 animate();
+
