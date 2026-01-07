@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gravity — Blog</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon/favicon_32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon/favicon_16x16.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../images/favicon/favicon_48x48.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="../images/favicon/favicon_64x64.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="../images/favicon/favicon_128x128.png">
+  <link rel="shortcut icon" href="../images/favicon/favicon.ico">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError : false
+      });
+    });
+  </script>
+
+  <!-- Prism.js for code highlighting -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDL5HQQ82Z"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-JDL5HQQ82Z');
+  </script>
+</head>
+
+<body>
+  <div id="header-placeholder">
+    <header>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/projects">Projects</a>
+        <a href="/achievements">Achievements</a>
+        <a href="/resume">Résumé</a>
+        <a href="/blog">Blog</a>
+      </nav>
+    </header>
+  </div>
+
+  <main class="blog-page">
+    <article class="blog-post">
+      <h1>gravity</h1>
+      <p>I've just finished writing all my US college essays!</p>
+
+      <p>This is a massive accomplishment. I should be relieved. I am.</p>
+
+      <p>What to do now? Study for my prelims that are coming up? Nah. It's time to write a blog post.</p>
+
+      <p>No, but, in all seriousness. I've been wanting to write here for a while, but I never got the time to. I've had to write a billion essays for my US apps, but they made me realise something important: I'm not that terrible at writing.</p>
+
+      <p>Exposition aside, I want to write about something really cool that I'd explored in part some months ago: gravity simulations!</p>
+
+      <p>Wait, what? Gravity simulations? From you? Aren't you the pure maths guy who thinks physics is too practical to be enjoyable?</p>
+
+      <p>That's true. I don't know how I ended up here either, but I somehow did. I think it happened at midnight. I was learning about magnetism for my school physics exams, and I started thinking:</p>
+
+      <p>Why don't magnetic monopoles exist? While that question alone probably deserves its own blog post, I'd asked this question to myself because in our syllabus, we learn electrostatics before magnetism. So I was already familiar with basic formulas like:</p>
+      
+      $$ F = \frac{1}{4\pi\epsilon_0} \frac{q_1 q_2}{r^2} $$
+
+      <p>I noticed a stark contrast in difficulty while doing magnetism from when I was doing electrostatics: everything was just so much harder here: and I didn't understand why. Conceptually, they're the same, right? Just attraction and repulsion, just like before!</p>
+
+      <p>I didn't feel like studying much. This is probably when mass came to mind. I thought: wait a minute, screw magnetism, aren't charges very similar to bodies with mass? I mean, we have Newton's law of gravitation:</p>
+      
+      $$ F = G \frac{m_1 m_2}{r^2} $$
+      
+      <p>that looks virtually identical to charges. That is interesting.</p>
+
+      <p>Of course, there are obvious differences, like how charges are signed but mass isn't, or how electrostatic force can be repulsive but gravitational force can't. I won't delve much into this, because what I really want to write about is related more to gravity: specifically that formula.</p>
+  
+      <p>I think I was just bored. I remember recently learning about HTML Canvas and decided to use my skills for good. I opened VSCode and quickly coded up a small program that let me spawn objects. It looked something like this (click to add dots):</p>
+      
+      <canvas id="sim1" style="width: 100%; height: 400px; background: #000; border-radius: 8px; margin: 1.5rem 0; cursor: crosshair;"></canvas>
+      <script>
+        (function() {
+          const canvas = document.getElementById('sim1');
+          const c = canvas.getContext('2d');
+          
+          function resize() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+          }
+          window.addEventListener('resize', resize);
+          resize(); // initial size
+
+          let b = [];
+
+          canvas.addEventListener("click", (e) => {
+            const rect = canvas.getBoundingClientRect();
+            b.push({color: '#ff0000', x: e.clientX - rect.left, y: e.clientY - rect.top, radius: 10});
+          });
+
+          function animate() {
+            c.clearRect(0, 0, canvas.width, canvas.height);
+            c.fillStyle = '#000';
+            c.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < b.length; ++i) {
+              c.beginPath();
+              c.fillStyle = b[i].color;
+              c.arc(b[i].x, b[i].y, b[i].radius, 0, 2 * Math.PI);
+              c.fill();
+            }
+
+            requestAnimationFrame(animate);
+          }
+          animate();
+        })();
+      </script>
+
+      <p>That's cool. Now, it's time to spice things up. In order to add gravity, I'd need three extra attributes: <code>mass</code>, <code>vx</code>, and <code>vy</code>. So far I have <code>color</code>, <code>x</code>, <code>y</code>, and <code>radius</code>. Color and radius are purely cosmetic. On the other hand, <code>x</code> and <code>y</code> are needed for position, <code>mass</code> is needed to determine how much inertia an object has, and <code>vx</code> and <code>vy</code> are needed to store the velocity of the body, which we'll need for actually simulating motion.</p>
+
+      <p>Alright. Let's add those.</p>
+
+      <pre><code class="language-javascript">document.addEventListener("click", (e) => {
+  b.push({mass: 5e30, vx: 0, vy: 0, color: '#ff0000', x: e.clientX, y: e.clientY, radius: 10});
+});</code></pre>
+
+      <p>At this point, you may have questions. Why is the mass <code>5e30</code>? Why is this object so massive?</p>
+
+      <p>Well... good question. The truth is, I tried many masses before this. I eventually realised that gravity would only work for really big ones. Blame the gravitational constant, not me.</p>
+
+      <p>Either way, I'd decided that I wanted my simulation to be 'as accurate as possible' so, naturally, I felt obligated to use astronomical masses.</p>
+
+      <p>So that tracks.</p>
+
+      <p>What's next? Oh right, I need to add the actual... gravity itself. This should be simple. Just apply Newton's formula on all $O(n^2)$ pairs, choosing a small enough $\Delta t$, right?</p>
+
+      <p>Not so fast. Before <code>const G = 6.6743e-11;</code> would make any sense, I'd have to determine how I intended to convert between pixels and kilometers. You see, the <code>radius</code> attribute I included before was purely visual and in pixels: I didn't really care about the physical signficance of it. On the other hand, all the calculations I'll need to perform for gravity very much care about units: so I'd probably have to as well.</p>
+
+      <p>How do I decide a scale?</p>
+
+      <p>I know that I definitely want the earth and the sun to fit in one frame. How would I have fun otherwise? Okay, so I need to be able to represent <code>1.5e8</code>.</p>
+
+      <p>I decided to go with a diagonal distance of 400 pixels corresponding to <code>1.5e8</code> kilometers. More formally:</p>
+
+      $$ 400\sqrt{2} \text{ pixels} = 1.5 \times 10^8 \text{ km} $$
+      $$ \implies 1 \text{ pixel} \approx 265,165 \text{ km} $$
+
+      <p>With this done, I can now code the nested for loop:</p>
+
+      <pre><code class="language-javascript">for (let i = 0; i < b.length; ++i) {
+  for (let j = i + 1; j < b.length; ++j) {
+    let r = 265165 * Math.sqrt((b[i].x - b[j].x) * (b[i].x - b[j].x) + (b[i].y - b[j].y) * (b[i].y - b[j].y));
+    let F = G * (b[i].mass / r) * (b[j].mass / r);
+    let F_vec = [265165 * (b[i].x - b[j].x), 265165 * (b[i].y - b[j].y)];
+    F_vec[0] /= r, F_vec[1] /= r;
+    F_vec[0] *= F, F_vec[1] *= F;
+    let a_ix = F_vec[0] / b[i].mass, a_iy = F_vec[1] / b[i].mass, a_jx = F_vec[0] / b[j].mass, a_jy = F_vec[1] / b[j].mass;
+    b[i].vx -= 1 / hz * a_ix / 265165, b[j].vx += 1 / hz * a_jx / 265165;
+    b[i].vy -= 1 / hz * a_iy / 265165, b[j].vy += 1 / hz * a_jy / 265165;
+  }
+}</code></pre>
+
+      <p>Okay. Okay. What just happened? What even is this code?!</p>
+
+      <p>Don't worry. It wasn't that easy coding it up either, and definitely didn't happen all at once. Let's go line by line.</p>
+
+      <p><code>let r = 265165 * Math.sqrt((b[i].x - b[j].x) * (b[i].x - b[j].x) + (b[i].y - b[j].y) * (b[i].y - b[j].y));</code></p>
+
+      <p>This makes sense. <code>r</code> is the distance between the two bodies. The <code>Math.sqrt</code> part is just Euclidean distance, and multiplying by <code>265165</code> converts pixels to kilometers.</p>
+
+      <p><code>let F = G * (b[i].mass / r) * (b[j].mass / r);</code></p>
+
+      <p>Alright, nice. This is just $F = G \frac{m_1 m_2}{r^2}$! So far, no issues whatsoever.</p>
+
+      <p><code>let F_vec = [265165 * (b[i].x - b[j].x), 265165 * (b[i].y - b[j].y)];</code></p>
+
+      <p>Hm, what? <code>F_vec</code>? Why do we need that? Oh. We're in two dimensions. Alright. I respect vectors, so this is cool, still very principled stuff. But wait, how is force equal to just $\Delta s$ in km?</p>
+
+      <p>Oh okay, it's mutated in the next lines:</p>
+
+      <pre><code class="language-javascript">F_vec[0] /= r, F_vec[1] /= r;
+F_vec[0] *= F, F_vec[1] *= F;</code></pre>
+
+      <p>It's obvious now: we initialise <code>F_vec</code> as a unit vector pointing from one object to the other, and then simply scale it up by <code>F</code>: the magnitude of force we calculated earlier.</p>
+      
+      <pre><code class="language-javascript">let a_ix = F_vec[0] / b[i].mass, a_iy = F_vec[1] / b[i].mass, a_jx = F_vec[0] / b[j].mass, a_jy = F_vec[1] / b[j].mass;</code></pre>
+
+      <p>This is also very simple: we're just inverting $F = ma$. i and j refer to the two objects, and x and y are the two dimensions.</p>
+
+      <pre><code class="language-javascript">b[i].vx -= 1 / hz * a_ix / 265165, b[j].vx += 1 / hz * a_jx / 265165;
+b[i].vy -= 1 / hz * a_iy / 265165, b[j].vy += 1 / hz * a_jy / 265165;</code></pre>
+
+      <p>While the opposite signs might be confusing at first, we're only calculating $F_{ji}$, and by Newton's third law, <code>i</code> will experience an equal and opposite force in the other direction. We divide by <code>265165</code> to convert back to pixels, and the <code>1/hz</code> part ensures that we... dampen the force by a bit.</p>
+
+      <p>While I could've probably adjusted mass or distance or something else about the objects I chose, I found the <code>dt</code> option to be the easiest at the moment, at the cost of being less 'principled'.</p>
+
+      <p>Let's not forget to actually update the distances based on the velocity. Adding these two lines before drawing the object suffices.</p>
+
+      <pre><code class="language-javascript">b[i].x += b[i].vx;
+b[i].y += b[i].vy;</code></pre>
+
+      <p>After all that hard work, we finally get a somewhat decent simulation!</p>
+
+      <canvas id="sim2" style="width: 100%; height: 500px; background: #000; border-radius: 8px; margin: 1.5rem 0; cursor: crosshair;"></canvas>
+      <script>
+        (function() {
+          const canvas = document.getElementById('sim2');
+          const c = canvas.getContext('2d');
+          
+          function resize() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+          }
+          window.addEventListener('resize', resize);
+          resize();
+
+          let b = [];
+          let userInteracted = false;
+
+          canvas.addEventListener("click", (e) => {
+            userInteracted = true;
+            const rect = canvas.getBoundingClientRect();
+            b.push({ mass: 5e30, vx: 0, vy: 0, color: '#ff0000', x: e.clientX - rect.left, y: e.clientY - rect.top, radius: 10 });
+          });
+
+          document.addEventListener('DOMContentLoaded', () => {
+            const btn2 = document.getElementById('sim2-btn-2body');
+            const btn3 = document.getElementById('sim2-btn-3body');
+
+            const addTooltip = (btn) => {
+              btn.title = "Try yourself first!";
+              
+              btn.addEventListener('click', () => {
+                 btn.removeAttribute('title');
+                 userInteracted = true; 
+              });
+
+              const originalText = btn.innerText;
+              btn.addEventListener('mouseenter', () => {
+                if (!userInteracted) {
+                  btn.innerText = "Try yourself first!";
+                }
+              });
+              btn.addEventListener('mouseleave', () => {
+                btn.innerText = originalText;
+              });
+            };
+
+            if (btn2) {
+              addTooltip(btn2);
+              btn2.addEventListener('click', () => {
+                b = [];
+                const cx = canvas.width / 2;
+                const cy = canvas.height / 2;
+                b.push({ mass: 5e30, vx: 0, vy: 0, color: '#ff0000', x: cx - 100, y: cy, radius: 10 });
+                b.push({ mass: 5e30, vx: 0, vy: 0, color: '#ff0000', x: cx + 100, y: cy, radius: 10 });
+                canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              });
+            }
+
+            if (btn3) {
+              addTooltip(btn3);
+              btn3.addEventListener('click', () => {
+                b = [];
+                const cx = canvas.width / 2;
+                const cy = canvas.height / 2;
+
+                b.push({ mass: 5e30, vx: 0.5, vy: 0, color: '#ff0000', x: cx, y: cy - 50, radius: 10 });
+                b.push({ mass: 5e30, vx: -0.5, vy: 0, color: '#ff0000', x: cx, y: cy + 50, radius: 10 });
+                b.push({ mass: 5e30, vx: 0, vy: 0.5, color: '#ff0000', x: cx - 100, y: cy, radius: 10 });
+
+                canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              });
+            }
+          });
+
+          let hz = 60;
+          const G = 6.6743e-11;
+
+          function animate() {
+            c.clearRect(0, 0, canvas.width, canvas.height);
+            c.fillStyle = '#000';
+            c.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < b.length; ++i) {
+              for (let j = i + 1; j < b.length; ++j) {
+                let r = 265165 * Math.sqrt((b[i].x - b[j].x) * (b[i].x - b[j].x) + (b[i].y - b[j].y) * (b[i].y - b[j].y));
+                let F = G * (b[i].mass / r) * (b[j].mass / r);
+                let F_vec = [265165 * (b[i].x - b[j].x), 265165 * (b[i].y - b[j].y)];
+                F_vec[0] /= r, F_vec[1] /= r;
+                F_vec[0] *= F, F_vec[1] *= F;
+                let a_ix = F_vec[0] / b[i].mass, a_iy = F_vec[1] / b[i].mass, a_jx = F_vec[0] / b[j].mass, a_jy = F_vec[1] / b[j].mass;
+                b[i].vx -= 1 / hz * a_ix / 265165, b[j].vx += 1 / hz * a_jx / 265165;
+                b[i].vy -= 1 / hz * a_iy / 265165, b[j].vy += 1 / hz * a_jy / 265165;
+              }
+            }
+
+            for (let i = 0; i < b.length; ++i) {
+              b[i].x += b[i].vx;
+              b[i].y += b[i].vy;
+
+              c.beginPath();
+              c.fillStyle = b[i].color;
+              c.arc(b[i].x, b[i].y, b[i].radius, 0, 2 * Math.PI);
+              c.fill();
+            }
+
+            requestAnimationFrame(animate);
+          }
+
+          animate();
+        })();
+      </script>
+
+      <p>... Wow.</p>
+
+      <p>While I knew what was coming, using it for the first time felt miraculous. This was not due to gravity or anything, but due to the fact that I've tried to create smooth animations programmatically before, and they've never worked. However, all of a sudden, I have an animation of a circle moving towards another circle, and it looks like it was generated by a Bezier curve. How can such beautiful visuals emerge from such simple rules?</p>
+
+      <p>I first tried this, obviously.</p>
+
+      <p>You can recreate this: try placing two objects.</p>
+
+      <div style="display: flex; justify-content: center; margin: 1.5rem 0;">
+        <button id="sim2-btn-2body" style="background: transparent; color: inherit; border: 1px solid currentColor; padding: 8px 16px; border-radius: 0; cursor: pointer; font-family: inherit;">
+          Spawn 2 objects
+        </button>
+      </div>
+
+      <p>That was cool. But let's make this more interesting.</p>
+      
+      <p>This one is a bit trickier. You can't just place three objects, you need to get one moving towards the left decently fast and then place one to the right of it and you'll see... no spoilers.</p>
+
+      <div style="display: flex; justify-content: center; margin: 1.5rem 0;">
+        <button id="sim2-btn-3body" style="background: transparent; color: inherit; border: 1px solid currentColor; padding: 8px 16px; border-radius: 0; cursor: pointer; font-family: inherit;">
+          Spawn 3 objects
+        </button>
+      </div>
+
+      <p>I asked and the simulation delivered.</p>
+
+      <p>Seeing that was sufficient to get me curious enough to Google this phenomenon. That is when I came across the Wikipedia article for the <a href="https://en.wikipedia.org/wiki/Two-body_problem">two body problem</a>.</p>
+
+      <p>I read this line:</p>
+
+      <blockquote>By contrast, the three-body problem (and, more generally, the n-body problem for n > 2) cannot be solved generally, except in special cases.</blockquote>
+
+      <p>By contrast. This means the two-body problem... can be solved generally, in all cases. Okay, what the hell... I need to try.</p>
+
+      <p>I then rushed to grab a pen and some paper. I should remind you: it was still midnight.</p>
+
+      <p>Let's do a quick runthrough, because my lucidity didn't last for long.</p>
+
+      <p>Given $\vec{F}$, acceleration ($\vec{a}$) is known. We want position $\vec{r}$.</p>
+      
+      $$
+      \begin{aligned}
+      \vec{v} &= \int \vec{a} \, dt \\
+      \vec{r} &= \iint \vec{a} \, dt \, dt
+      \end{aligned}
+      $$
+
+      <p>The force on body A is:</p>
+      $$ \vec{F}_A = G \frac{m_a m_b}{|\vec{r}_b - \vec{r}_a|^2} \frac{\vec{r}_b - \vec{r}_a}{|\vec{r}_b - \vec{r}_a|} $$
+
+      <p>So the position of A at time $t$ is:</p>
+      $$ \vec{r}_a(t) = \frac{G m_a m_b}{m_a} \iint \frac{\vec{r}_b(t) - \vec{r}_a(t)}{|\vec{r}_b(t) - \vec{r}_a(t)|^3} \,dt\,dt $$
+      $$ \vec{r}_b(t) = \frac{G m_a m_b}{m_b} \iint \frac{\vec{r}_a(t) - \vec{r}_b(t)}{|\vec{r}_a(t) - \vec{r}_b(t)|^3} \,dt\,dt $$
+
+      <p>Or, in more standard form, we can differentiate both equations twice and get:</p>
+
+      $$ \frac{d^2 \vec{r}_a}{dt^2} = \frac{G m_a m_b}{m_a} \frac{\vec{r}_b - \vec{r}_a}{|\vec{r}_b - \vec{r}_a|^3} $$
+      $$ \frac{d^2 \vec{r}_b}{dt^2} = \frac{G m_a m_b}{m_b} \frac{\vec{r}_a - \vec{r}_b}{|\vec{r}_a - \vec{r}_b|^3} $$
+
+      <p>I tried, but I wasn't able to solve this. If anyone knows how to, please let me know: I'd appreciate it.</p>
+
+      <p>Any way, that's not the last thing I did. Next, I realised: I have a gravity simulator (*) anyway, I have to try some orbits.</p>
+
+      <p>After a quick Google search for the right initial conditions for a stable three body configuration, I made this.</p>
+
+      <canvas id="sim3" tabindex="0" style="width: 100%; height: 500px; background: #000; border-radius: 8px; margin: 1.5rem 0; outline: none; cursor: crosshair;"></canvas>
+      <p style="font-size: 0.9em; text-align: center; margin-top: -1rem; margin-bottom: 2rem;">(Click to spawn extra mass. Click canvas then use Arrow Keys to move bodies)</p>
+      
+      <script>
+        (function() {
+          const canvas = document.getElementById('sim3');
+          const c = canvas.getContext('2d');
+          
+          function resize() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+            init();
+          }
+          
+          let b = [];
+          
+          function init() {
+            b = [
+              {
+                mass: 1.6e35,
+                radius: 30,
+                x: canvas.width / 2 + 200,
+                y: canvas.height / 2,
+                vx: 0,
+                vy: 0.5,
+                color: '#ff0000'
+              },
+              {
+                mass: 1.6e35,
+                radius: 30,
+                x: canvas.width / 2 - 100,
+                y: canvas.height / 2 + 173.205,
+                vx: -0.433,
+                vy: -0.25,
+                color: '#00ff00'
+              },
+              {
+                mass: 1.6e35,
+                radius: 30,
+                x: canvas.width / 2 - 100,
+                y: canvas.height / 2 - 173.205,
+                vx: 0.433,
+                vy: -0.25,
+                color: '#0000ff'
+              }
+            ];
+          }
+
+          window.addEventListener('resize', resize);
+          setTimeout(resize, 0);
+
+          const G = 6.6743e-11;
+          const keys = new Set();
+          let dx = 0, dy = 0;
+
+          let hz = 6000000;
+          
+          canvas.addEventListener("keydown", (e) => {
+            if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+                e.preventDefault();
+            }
+            keys.add(e.key);
+          });
+
+          canvas.addEventListener("keyup", (e) => {
+            keys.delete(e.key);
+          });
+
+          canvas.addEventListener("click", (e) => {
+            const rect = canvas.getBoundingClientRect();
+            b.push(
+              {mass: 5e30, radius: 30, x: e.clientX - rect.left, y: e.clientY - rect.top, vx: 0, vy: 0, color: '#ff0000'}
+            );
+          });
+
+          function animate() {
+            dx = 0; dy = 0;
+            if (keys.has("ArrowRight")) dx -= 2;
+            if (keys.has("ArrowLeft")) dx += 2;
+            if (keys.has("ArrowUp")) dy += 2;
+            if (keys.has("ArrowDown")) dy -= 2;
+
+            for (let i = 0; i < b.length; ++i) {
+              b[i].x += dx;
+              b[i].y += dy;
+            }
+
+            c.clearRect(0, 0, canvas.width, canvas.height);
+            c.fillStyle = '#000';
+            c.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < b.length; ++i) {
+              for (let j = i + 1; j < b.length; ++j) {
+                let r = 265165 * Math.sqrt((b[i].x - b[j].x) * (b[i].x - b[j].x) + (b[i].y - b[j].y) * (b[i].y - b[j].y));
+                let F = G * (b[i].mass / r) * (b[j].mass / r);
+                let F_vec = [265165 * (b[i].x - b[j].x), 265165 * (b[i].y - b[j].y)];
+                F_vec[0] /= r, F_vec[1] /= r;
+                F_vec[0] *= F, F_vec[1] *= F;
+                let a_ix = F_vec[0] / b[i].mass, a_iy = F_vec[1] / b[i].mass, a_jx = F_vec[0] / b[j].mass, a_jy = F_vec[1] / b[j].mass;
+                b[i].vx -= 1 / hz * a_ix / 265165, b[j].vx += 1 / hz * a_jx / 265165;
+                b[i].vy -= 1 / hz * a_iy / 265165, b[j].vy += 1 / hz * a_jy / 265165;
+              }
+            }
+            for (let i = 0; i < b.length; ++i) {
+              // update velocity + position
+              b[i].x += b[i].vx;
+              b[i].y += b[i].vy;
+
+              // draw body
+              c.beginPath();
+              c.fillStyle = b[i].color;
+              c.arc(b[i].x, b[i].y, b[i].radius, 0, 2 * Math.PI);
+              c.fill();
+            }
+
+            requestAnimationFrame(animate);
+          }
+
+          animate();
+        })();
+      </script>
+
+      <p>I also tweaked <code>hz</code> (time is now a lot slower) and the masses a bit (to be more precise, I made the three initial bodies really heavy compared to the spawned ones), so you'll notice changed behaviour on object spawning. But we now have a stable three body configuration!</p>
+
+      <p>I've had my fun for now. If I were to continue this, it'd almost certainly be about the two differnetial equations from before, because I really want to know how I'd solve them.</p>
+
+      <p>Some disclaimers:</p>
+
+      <p>If you were expecting this blog to head in a concrete direction or with a satisfying conclusion, sorry for not providing that. The truth is, I don't think I've myself 'concluded' this line of thought either, so, in that way, now we're both suffering.</p>
+
+      <p>The update loop where I calculate forces and then apply them is, I later found out, called Euler integration. It is also one of the worst ways to numerically integrate in physics simulations because it doesn't conserve energy.</p>
+
+      <p>This is also why, if you keep the 'stable' three body orbit open for long enough, you may discover that it isn't so 'stable' after all. The reality, again, is that, in order to actually get an orbit that's stable <em>forever</em>,</p>
+      <ul>
+        <li>The initial conditions need to be perfect (and they involve $\sqrt{3}$, so I'm not sure how you'd even accomplish this numerically)</li>
+        <li>The method of integration used should definitely not be Euler. I've heard that symplectic integrators do a better job, although I may be wrong.</li>
+      </ul>
+
+      <p>(*) Ignoring the orbits issue, the gravity simulator I've coded here is still inaccurate due to the same issues just discussed. But it's probably accurate enough for 5-10 seconds and it looks cool regardless.</p>
+
+      <p>Also, if you want to play with the last simulation more, <a href="https://avighnac.me/random/gravity/gravity">here's</a> a full-screen link.</p>
+
+      <p>Thanks for reading!</p>
+    </article>
+  </main>
+
+  <div id="footer-placeholder">
+    <footer>
+      <div class="footer-container">
+        <p>&copy; 2026 Avighna Chhatrapati</p>
+        <p>
+          <a href="https://linkedin.com/in/avighnakc" target="_blank" rel="noopener noreferrer">LinkedIn</a> &middot;
+          <a href="mailto:avighnakc@gmail.com">Email</a> &middot;
+          <a href="https://github.com/avighnac" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/script.js"></script>
+</body>
+
+</html>
