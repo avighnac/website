@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-  <a href="https://avighnac.me" target="_blank">avighnac.me</a>
+  <a href="https://avighnac.com" target="_blank">avighnac.com</a>
 </h1>
 
 <p align="center">My personal website</p>
