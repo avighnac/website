@@ -126,6 +126,18 @@ a.cta-button:hover {
   line-height: 1.5;
 }
 
+.project img.project-img-rect {
+  width: 120px;
+  height: 120px;
+  border-radius: 0;
+  object-fit: contain;
+  object-position: left center;
+  border: none;
+  box-shadow: none;
+  transform: scale(1.7);
+  transform-origin: right center;
+}
+
 /* For projects without images */
 .project.no-image {
   justify-content: center;
@@ -150,6 +162,13 @@ a.cta-button:hover {
   .project img {
     width: 100px;
     height: 100px;
+  }
+
+  .project img.project-img-rect {
+    width: 100px;
+    height: 100px;
+    transform: scale(1.4);
+    transform-origin: center;
   }
 
   .project.no-image .project-text {

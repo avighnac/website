@@ -13,15 +13,15 @@
   <link rel="icon" type="image/png" sizes="64x64" href="images/favicon/favicon_64x64.png">
   <link rel="icon" type="image/png" sizes="128x128" href="images/favicon/favicon_128x128.png">
   <link rel="shortcut icon" href="images/favicon/favicon.ico">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JDL5HQQ82Z"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JDL5HQQ82Z');
-</script>
-<link rel="shortcut icon" href="../images/favicon/favicon.ico">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDL5HQQ82Z"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-JDL5HQQ82Z');
+  </script>
+  <link rel="shortcut icon" href="../images/favicon/favicon.ico">
 
 </head>
 
@@ -41,6 +41,17 @@
   <main>
     <h1>Projects</h1>
     <p>Here are some things I've built, hacked on, or obsessed over:</p>
+
+    <section class="project">
+      <img src="/images/libapfs.svg" alt="arithmetica-tui icon" class="project-img-rect" />
+      <div class="project-text">
+        <h2>libapfs</h2>
+        <p>A read-only implementation of Apple's APFS filesystem in C++. It can parse APFS containers, navigate the filesystem hierarchy, and extract files from disk images and raw devices. Still under active development.</p>
+        <div class="project-links">
+          <a href="https://github.com/avighnac/libapfs" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </section>
 
     <section class="project">
       <img src="/images/arithmetica.jpeg" alt="arithmetica-tui icon" />
