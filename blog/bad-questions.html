@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>On &#x27;what does this represent&#x27;... and related thoughts — Blog</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon/favicon_32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon/favicon_16x16.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="../images/favicon/favicon_48x48.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="../images/favicon/favicon_64x64.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="../images/favicon/favicon_128x128.png">
+  <link rel="shortcut icon" href="../images/favicon/favicon.ico">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JDL5HQQ82Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JDL5HQQ82Z');
+</script>
+
+  <link rel="stylesheet" href="../assets/representation.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.querySelector('.representation-post'), {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError : false
+      });
+    });
+  </script>
+
+</head>
+
+<body>
+  <div id="header-placeholder">
+    <header>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/projects">Projects</a>
+        <a href="/achievements">Achievements</a>
+        <a href="/blog">Blog</a>
+        <a href="/assets/resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+      </nav>
+    </header>
+  </div>
+
+  <main class="blog-page">
+    <article class="blog-post representation-post">
+      <h1>On 'what does this represent'... and related thoughts</h1>
+
+      <p>When we are solving problems, we often deal with and employ the usage of complicated 'structures', with multiple abstraction layers stacked together. And, of course, as good problem solvers, we should strive to understand and meaningfully interpret everything present in our solution... right?</p>
+
+      <p>Let me tell you a story about a time when I was explaining a problem to one of my friends. It was on LeetCode: <a href="https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/description/">Shortest Subarray with Sum at Least K</a>. The statement is short: you're given $n$ and an array $a[]$ of length $n$, and you must return the length of the shortest non-empty subarray that has a sum that is at least $k$.</p>
+
+      <p>There are easier solutions, but my first thought was to construct a prefix sum array and then rewrite the condition as $p[j] - p[i] \ge k$, minimizing $j-i$. Then, for a fixed $i$, we notice that we require only these two conditions to be true:</p>
+
+      <div class="math-block" tabindex="0" role="region" aria-label="Prefix sum conditions">$$\begin{aligned}1.\quad &amp; j &gt; i \\ 2.\quad &amp; p[j] \ge k + p[i]\end{aligned}$$</div>
+
+      <p>My solution was then to use a segment tree where indices stored values of $p[]$ (so that a range query from $k+p[i]$ to $\infty$ would enforce the second condition), while reverse looping and adding at the end of the loop body to enforce the first condition (<a href="https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/submissions/2160666808">code</a>).</p>
+
+      <p>Pretty; simple, right?</p>
+
+      <p>However, my friend was still confused. She then proceeded to ask me a question which took me by surprise: what does the segment tree represent?</p>
+
+      <p>...</p>
+
+      <p>I hadn't really thought about that. So I did think about it. After a few minutes, I figured out that in this case, the segment tree was really the 'inverse prefix sum' array. That is, if $P[a] = b$, then $st[b] = a$. Since $P$ is not bijective (and is, in fact, one to many), $st[b] = \min\{a\}$ such that $P[a] = b$.</p>
+
+      <p>This made me realise two things:</p>
+      <ol>
+        <li>I didn't know what the segment tree represented until I was made to think about it.</li>
+        <li>Understanding what the segment tree represented quite literally contributed nothing towards understanding how my solution worked.</li>
+      </ol>
+
+      <p>So this is an interesting phenomenon. It actually goes against fundamental wisdom—wisdom that I myself preach—that you must understand everything you use before actually using it: the so-called 'pure' way of doing things.</p>
+
+      <p>Before interpreting this further, let me tell you about what motivated me to write this blog. Two weeks after this incident, I found myself attempting the <a href="https://atcoder.jp/contests/aalc001">AtCoder segment tree contest</a> (fun contest, by the way, would recommend). One of the questions required that I make a lazy segment tree that supports the following operations:</p>
+
+      <ol>
+        <li>Given $l$, $r$, and $t$, perform $A[i] \mathrel{+}= R[i]\cdot t$ for $l \le i \le r$</li>
+        <li>Given $l$, $r$, $t$, perform $R[i] \mathrel{+}= t$ for $l \le i \le r$</li>
+      </ol>
+
+      <p>Here, $R[i]$ is the 'representative value' for position $i$. There are two operations, so I reached for a lazy type $F$ that stored two numbers: $\text{incr}$, and $\text{rep\_incr}$ (for operations 1 and 2 respectively).</p>
+
+      <details class="recall-box">
+        <summary>Recall: lazy segment trees</summary>
+        <p>A lazy segment tree works on two types: $T$: the data type and $F$: the lazy tag type. We must be able to compose two $T$'s ($\text{seg}[v] = \text{seg}[2v] + \text{seg}[2v+1]$), two $F$'s (to combine lazy tags), and define how $F$ must be applied on $T$ (pushing $\text{lazy}[v]$ to $\text{seg}[v]$).</p>
+      </details>
+
+      <p>To apply $F$ to $T$, which is just <code>(int, int)</code> (sum of values, sum of representatives) in this case, I chose to apply $\text{incr}$ first, then $\text{rep\_incr}$ (this choice is arbitrary). Composing two $T$s is just regular pairwise integer addition. The only part remaining to figure out was how to compose two $F$s.</p>
+
+      <p>If $T = (A, B)$ and $F = (u, v)$, then applying $F$ to $T$ on a segment of length $L$ gives</p>
+
+      <div class="math-block" tabindex="0" role="region" aria-label="Lazy tag equation">$$T' = (A + uB,\; B + vL)\text{.}$$</div>
+
+      <p>If we then try to apply $F_1 = (u_1, v_1)$ and $F_2 = (u_2, v_2)$ in order, we get</p>
+
+      <div class="math-block" tabindex="0" role="region" aria-label="Lazy tag equation">$$T' = \bigl(A + (u_1+u_2)B + u_2v_1L,\; B + (v_1+v_2)L\bigr)\text{.}$$</div>
+
+      <p>We can see that the composition is <em>almost</em> possible, but it's not right now, because of $u_2v_1L$.</p>
+
+      <p>At this point, I just decided to add another term $w$ to my lazy tag, redefining my update as</p>
+
+      <div class="math-block" tabindex="0" role="region" aria-label="Lazy tag equation">$$T' = (A + uB + wL,\; B + vL)\text{.}$$</div>
+
+      <p>With this change, applying $F_1 = (u_1,v_1,w_1)$ and $F_2 = (u_2,v_2,w_2)$ gives</p>
+
+      <div class="math-block" tabindex="0" role="region" aria-label="Lazy tag equation">$$T' = \bigl(A + (u_1+u_2)B + (w_1+w_2+u_2v_1)L,\; B + (v_1+v_2)L\bigr)\text{.}$$</div>
+
+      <p>This does compose: $F_1$ and then $F_2$ can be represented by the single operation</p>
+
+      <div class="math-block" tabindex="0" role="region" aria-label="Lazy tag equation">$$F' = (u_1+u_2,\; v_1+v_2,\; w_1+w_2+u_2v_1)\text{!}$$</div>
+
+      <p>Great, so we've solved our problem. It was now time to code this up. I had chosen nice names for $u$ and $v$: $\text{incr}$ and $\text{rep\_incr}$ respectively. $\text{incr}$ means the increment $A[i] \mathrel{+}= t\cdot R[i]$, and $\text{rep\_incr}$ means the increment $R[i] \mathrel{+}= t$. But I had to add another variable to the lazy tag: what do I name it? I decided to go with $w$.</p>
+
+      <p>I proceeded to code this up and solve the problem (which was <a href="https://atcoder.jp/contests/aalc001/submissions/80032824">O - Minimum Value</a>). Later, satisfied with my successful submission, I looked at the code again. Everything was clean and I understood all of the algebra that was going on.</p>
+
+      <p>I looked at my lazy type again and chuckled at the absurd difference between the names $\text{incr}$, $\text{rep\_incr}$ and $w$. How very competitive programmer of me to give a random, unhelpful name to a variable, I thought. But then I paused and looked at the name once again. $w$. Hmm. What is $w$? What does $w$ <em>represent</em>?</p>
+
+      <p>What was common among these two examples? Both were examples of a problem successfully being solved without the <em>need</em> to interpret the meaning of some quantities. However, the diligent reader may also notice a difference. If we think about what $w$ really represents, we <strong>can</strong> eventually realise that it's simply range addition: $A[i] \mathrel{+}= t$! So our lazy segment tree actually supports <em>three</em> operations instead of just two:</p>
+
+      <ol>
+        <li>Given $l$, $r$, and $t$, perform $A[i] \mathrel{+}= R[i]\cdot t$ for $l \le i \le r$</li>
+        <li>Given $l$, $r$, $t$, perform $R[i] \mathrel{+}= t$ for $l \le i \le r$</li>
+        <li>Given $l$, $r$, and $t$, perform $A[i] \mathrel{+}= t$ for $l \le i \le r$</li>
+      </ol>
+
+      <p>A motivated problem solver would also be able to take their time to realise that just operations 1 and 2 are not closed under composition, but operations 1,2, and 3 are. When you apply operation 1 after just having applied operation 2, you must add a constant increment equal to the difference between the previous and current representative values to each element in your range, and this is just an instance of operation 3.</p>
+
+      <p>I invented this explanation retroactively, but it is possible to have interpreted $w$ as operation 3 while coming up with it.</p>
+
+      <p>And that brings us to the core of it. We are often told that being a good problem solver means understanding every little detail about every tool that we're using. I claim that there are instances where asking what something does is actually a <strong>bad question</strong>!</p>
+
+      <p>What makes something a good question to ask while solving a problem? The question should shed light on something meaningful that helps us understand the process we're performing better. Sometimes, a question about what something represents is extremely helpful: asking what a DP state represents is a very good question because how can you even understand what's going on if you don't know what we're trying to calculate? Sometimes the question is neither good nor bad, as is the case with asking what $w$ means in the lazy segment tree example. We could solve the whole problem without caring what $w$ represented because the only role it served was to make $F$ closed under composition. At the same time, $w$ did end up carrying meaning that is fun to know, and maybe somewhat insightful. And sometimes, like in the very first example of this blog, the question about what the segment tree represents is actually a distraction from solving the problem!</p>
+
+      <p>Before I wrap this blog up, there's another really popular paradigm where we construct a system, understanding exactly what we're doing as a whole, but not what its inner workings represent. This is, of course, AI models! A large language model processes tokens in several layers. We know, concretely, what the input to the first layer and the output of the last layer represent. There have been several attempts to, for bigger models, understand what it's doing in between. And, sometimes, these attempts have been successful. We may be able to abstract some dimension to mean something specific, like gender or age. But the model is not constrained to only classify things based on what humans can understand (one of its many strengths: we don't need to explicitly list out features!). It may invent its own dimensions which may combine multiple features together, in weird proportions, in such a way that if someone were to ask 'what does this layer's output represent' there may not be a great answer.</p>
+
+      <p>Despite this, AI models work wonderfully well. Maybe the ignorance of parameters and their meaning is not a curse or limitation, but a blessing in disguise that allows us to be better problem solvers.</p>
+    </article>
+  </main>
+
+  <div id="footer-placeholder">
+    <footer>
+      <div class="footer-container">
+        <p>&copy; <span id="year"></span> Avighna Chhatrapati</p>
+        <p>
+          <a href="https://linkedin.com/in/avighnakc" target="_blank" rel="noopener noreferrer">LinkedIn</a> &middot;
+          <a href="mailto:avighnakc@gmail.com">Email</a> &middot;
+          <a href="https://github.com/avighnac" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/script.js"></script>
+</body>
+
+</html>

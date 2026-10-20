@@ -1,0 +1,91 @@
+.representation-post {
+  max-width: 780px;
+  line-height: 1.8;
+}
+
+.representation-post h1 {
+  font-size: clamp(1.9rem, 5vw, 2.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  margin-bottom: 2.5rem;
+  text-wrap: balance;
+}
+
+.representation-post p,
+.representation-post li {
+  font-size: 1.1rem;
+  overflow-wrap: break-word;
+}
+
+.representation-post li {
+  margin: 0.65rem 0;
+}
+
+.representation-post ol {
+  padding-left: 1.6rem;
+  margin: 1.5rem 0;
+}
+
+.representation-post hr {
+  width: 5rem;
+  border: 0;
+  border-top: 1px solid #555;
+  margin: 3rem auto;
+}
+
+.representation-post code {
+  font-size: 0.9em;
+}
+
+.representation-post .math-block {
+  overflow-x: auto;
+  padding: 0.6rem 1rem;
+  margin: 1.5rem 0;
+  background: #191919;
+  border: 1px solid #303030;
+  border-radius: 8px;
+}
+
+.representation-post .katex {
+  font-size: 1.05em;
+}
+
+.representation-post .katex-display {
+  margin: 0.7rem 0;
+}
+
+.representation-post .katex-display > .katex {
+  text-align: left;
+}
+
+.representation-post .recall-box {
+  margin: 2rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid #444;
+}
+
+.representation-post summary {
+  cursor: pointer;
+}
+
+.representation-post summary:focus-visible,
+.representation-post .math-block:focus-visible {
+  outline: 2px solid #aaccff;
+  outline-offset: 4px;
+}
+
+.representation-post .recall-box p {
+  margin: 1rem 0 0;
+}
+
+@media (max-width: 600px) {
+  .representation-post {
+    padding: 0;
+    margin-top: 1.5rem;
+  }
+
+  .representation-post .math-block {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+}
